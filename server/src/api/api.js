@@ -7,7 +7,13 @@ router.post(() => {
 
 });
 
-router.get(() => {
+router.get('/oauth', (req, res, next) => {
+  console.log(req.query);
+
+  oauth.authorize(req)
+    .then()
+    
+    .catch();
 
 });
 
