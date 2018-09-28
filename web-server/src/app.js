@@ -33,4 +33,4 @@ app.stop = () => {
   });
 };
 
-export default app;
+module.exports = app;
