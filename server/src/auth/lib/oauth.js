@@ -27,11 +27,11 @@ const authorize = (req) => {
           let user = response.body;
           console.log('step three:', user);
           return user;
-        })
+        });
     })
     .then(githubUser => {
       console.log('4 create an account');
-      return User.returnFromOauth(githubUser);
+      return User.FromOAuth(githubUser);
     })
     .then(user => {
       console.log('5 created user, generate token...');
