@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>OAUTH</title>
+</head>
+
+<body>
+  <div id="githubAuth">
+
+  </div>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
+    crossorigin="anonymous"></script>
+  <script>
+    let githubURL = 'https://github.com/login/oauth/authorize';
+
+    let options = {
+      client_id: `15bcb7c2a5c0c8e61518`,
+      redirect_uri: `http://localhost:3000/oauth`,
+      scope: ``,
+      state: ``,
+      allow_signup: `true`
+    }
+
+
+    let QueryString = Object.keys(options).map(key => `${key}=${encodeURIComponent(options[key])}`).join('&');
+    let authURL = `${githubURL}?${QueryString}`;
+
+    $('#githubAuth').append(`<a href="${authURL}">Login with Github</a>`);
+  </script>
+</body>
+
+</html>
