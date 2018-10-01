@@ -1,7 +1,7 @@
 'use strict';
 
 import superagent from 'superagent';
-import User from 'auth/model.js';
+import User from '../model.js';
 
 const authorize = (req) => {
   let code = req.query.code;
@@ -31,7 +31,7 @@ const authorize = (req) => {
     })
     .then(githubUser => {
       console.log('4 create an account');
-      return User.FromOAuth(githubUser);
+      return User.createFromOAuth(githubUser);
     })
     .then(user => {
       console.log('5 created user, generate token...');

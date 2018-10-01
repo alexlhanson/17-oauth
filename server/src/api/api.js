@@ -2,6 +2,7 @@
 
 import express from 'express';
 const router = express.Router();
+import authorize from '../auth/lib/oauth.js';
 
 router.post(() => {
 
@@ -10,10 +11,15 @@ router.post(() => {
 router.get('/oauth', (req, res, next) => {
   console.log(req.query);
 
-  oauth.authorize(req)
-    .then()
+  authorize(req)
+    .then(token => {
+      console.log('token: ', token);
+      res.cookie('token', token);
+      res.redirect(process.env.REDIRECT_CLIENT_URI);
+
+    })
     
-    .catch();
+    .catch(error => error);
 
 });
 

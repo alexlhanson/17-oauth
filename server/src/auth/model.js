@@ -18,14 +18,15 @@ userSchema.statics.createFromOAuth = function (githubUser) {
     return Promise.reject('invalid github user');
   }
 
-  return this.findOne({ username: githubUser })
+  console.log('im the githubUser:', githubUser);
+  return this.findOne({ username: githubUser.login })
     .then(user => {
       if (!user) { throw new Error('User not found');}
       console.log('welcome back');
       return user;
     })
     .catch(err => {
-      let username = githubUser;
+      let username = githubUser.login;
 
       return this.create({
         username: username,
