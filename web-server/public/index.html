@@ -154,7 +154,8 @@
       let id = $(this).find('[name=player-id]').val();
 
       superagent.get('http://localhost:3000/auth/player/get/:id')
-        .send()
+        .set("Authorization", "Bearer " + token)
+        .send({player: `${id}`})
         .then(response => {
           $('#get-player').text(response);
         })
@@ -165,6 +166,8 @@
       let id = $(this).find('[name=player-id]').val();
 
       superagent.delete('http://localhost:3000/auth/player/delete/:id')
+      .set("Authorization", "Bearer " + token)
+        .send({player: `${id}`})
         .then(response => {
           $('#get-player').text(response);
         })
