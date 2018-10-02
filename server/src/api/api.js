@@ -4,8 +4,9 @@ import express from 'express';
 const router = express.Router();
 import authorize from '../auth/lib/oauth.js';
 import User from '../auth/model.js';
+import auth from '../auth/lib/middleware.js';
 
-router.post('/register', (req, res, next) => {
+router.post('/register', auth, (req, res, next) => {
   console.log('Im posting');
   let user = new User(req.body);
   user.save()
@@ -13,7 +14,7 @@ router.post('/register', (req, res, next) => {
     .catch(next);
 });
 
-router.get('/oauth', (req, res, next) => {
+router.get('/oauth', auth, (req, res, next) => {
   console.log(req.query);
 
   authorize(req)
