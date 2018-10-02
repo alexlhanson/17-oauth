@@ -11,7 +11,7 @@ let Schema = mongoose.Schema;
 
 const userSchema = Schema({
   username: { type: String, required: true, unique: true },
-  password: { type: String},
+  password: { type: String },
 });
 
 userSchema.pre('save', function (next) {
@@ -33,6 +33,18 @@ userSchema.statics.authenticate = function (auth) {
   return this.findOne(mongoQuery)
     .then(user => user && user.comparePassword(auth.password))
     .catch(console.error);
+};
+
+userSchema.statics.authorize = function (token) {
+  console.log(token);
+  let parsedToken = jwt.verify(token, process.env.SECRET);
+  let query = { _id: parsedToken.id };
+  console.log(query);
+
+  return this.findOne(query)
+    .then(user => user)
+    .catch(console.error);
+
 };
 
 userSchema.statics.createFromOAuth = function (githubUser) {

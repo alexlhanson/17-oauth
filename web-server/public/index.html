@@ -137,7 +137,7 @@
       let authString = btoa(`${username}:${password}`);
 
       superagent.get('http://localhost:3000/signin')
-        .set('Basic ' + authString)
+        .set('Authorization', 'Basic ' + authString)
         .then(response => {
           $('#token').text(response.text);
           $('#rugby-stats').fadeIn();
@@ -153,11 +153,31 @@
       e.preventDefault();
       let id = $(this).find('[name=player-id]').val();
 
-      superagent.get('http://localhost:3000/auth/player/get/:id')
-        .set("Authorization", "Bearer " + token)
-        .send({player: `${id}`})
+      superagent.get(`http://localhost:3000/player/get/${id}`)
+        .set("Authorization", "Bearer " + token.innerHTML)
+        .set('Content-Type', 'application/json')
         .then(response => {
-          $('#get-player').text(response);
+          $('#get-player').text(response.body);
+        })
+    })
+
+    $('#rugby-post').on('submit', function (e) {
+      e.preventDefault();
+      let playerName = $(this).find('[name=player-name]').val();
+      let position = $(this).find('[name=player-position]').val();
+      let matches = $(this).find('[name=player-matches]').val();
+      let tries = $(this).find('[name=player-tries]').val();
+      let points = $(this).find('[name=player-points]').val();
+      let postData = { playerName, position, matches, tries, points };
+      console.log(token.innerHTML);
+      console.log(postData);
+
+      superagent.post('http://localhost:3000/player')
+        .set("Authorization", "Bearer " + token.innerHTML)
+        .send(postData)
+        .then(response => {
+          console.log(response);
+          response.send(response);
         })
     })
 
@@ -165,11 +185,10 @@
       e.preventDefault();
       let id = $(this).find('[name=player-id]').val();
 
-      superagent.delete('http://localhost:3000/auth/player/delete/:id')
-      .set("Authorization", "Bearer " + token)
-        .send({player: `${id}`})
+      superagent.delete(`http://localhost:3000/player/delete/${id}`)
+        .set("Authorization", "Bearer " + token.innerHTML)
         .then(response => {
-          $('#get-player').text(response);
+          $('#get-player').text(response.body);
         })
     })
 
