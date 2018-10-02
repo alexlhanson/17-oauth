@@ -12,6 +12,7 @@
   <main>
     Access Token: <span id="token"></span>
     <hr>
+
     <h2>Register</h2>
     <form id="register">
       <label for="user-name">User Name:</label>
@@ -20,16 +21,28 @@
       <input type="password" name="password" autocomplete="off">
       <input type="submit" value="Create User">
     </form>
+
+    <h2>Signin</h2>
+    <form id="signin">
+      <label for="user-name">User Name:</label>
+      <input type="text" name="user-name" autocomplete="off">
+      <label for="password">Password:</label>
+      <input type="password" name="password" autocomplete="off">
+      <input type="submit" value="Sign in">
+    </form>
+
     <div id="githubAuth">
 
 
     </div>
+
   </main>
   <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8="
     crossorigin="anonymous"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/superagent/3.8.3/superagent.min.js"></script>
 
   <script>
+    //github registration
     let githubURL = 'https://github.com/login/oauth/authorize';
 
     let options = {
@@ -58,6 +71,20 @@
         console.log('this is token:', response.text)
         $('#token').text(response.text);
       })
+    });
+
+    $('#signin').on('submit', function (e){
+      e.preventDefault();
+      let username = $(this).find('[name=user-name]').val();
+      let password = $(this).find('[name=password]').val();
+      let authString = btoa(`${username}:${password}`);
+
+      superagent.get('http://localhost:3000/signin')
+      .set('Basic ' + authString)  
+        .then(response => {
+        $('#token').text(response.text);
+        
+        })
     });
 
   </script>
