@@ -11,7 +11,7 @@ let Schema = mongoose.Schema;
 
 const userSchema = Schema({
   username: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  password: { type: String},
 });
 
 userSchema.pre('save', function (next) {
