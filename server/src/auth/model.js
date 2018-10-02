@@ -15,25 +15,25 @@ const userSchema = Schema({
 });
 
 userSchema.pre('save', function (next) {
-  console.log('what is this: ', this);
-  try {
-    bcrypt.hash(this.password, 2)
-      .then(hashedPassword => {
-        console.log('the hashedPassword: ', hashedPassword);
 
-        this.password = hashedPassword;
-        console.log('this password is???:', this.password);
-        next();
-      })
-      .catch(error => {
-        console.error(error);
-      });
-  } catch(e){
-    console.log(e);
-  }
-  console.log('my random console log!!!');
+  bcrypt.hash(this.password, 2)
+    .then(hashedPassword => {
+      this.password = hashedPassword;
+      next();
+    })
+    .catch(error => {
+      console.error(error);
+    });
 });
 
+userSchema.statics.authenticate = function (auth) {
+  let mongoQuery = { username: auth.username };
+
+  // look for the user in mongo, if it exists check the password provided in the auth against the password in the database
+  return this.findOne(mongoQuery)
+    .then(user => user && user.comparePassword(auth.password))
+    .catch(console.error);
+};
 
 userSchema.statics.createFromOAuth = function (githubUser) {
   console.log('creating user from github user');
@@ -41,7 +41,6 @@ userSchema.statics.createFromOAuth = function (githubUser) {
     return Promise.reject('invalid github user');
   }
 
-  console.log('im the githubUser:', githubUser);
   return this.findOne({ username: githubUser.login })
     .then(user => {
       if (!user) { throw new Error('User not found'); }
@@ -50,15 +49,22 @@ userSchema.statics.createFromOAuth = function (githubUser) {
     })
     .catch(err => {
       let username = githubUser.login;
+      let password = 'none';
 
       return this.create({
         username: username,
+        password: password,
       });
     });
 };
 
 userSchema.methods.generateToken = function () {
   return jwt.sign({ id: this._id }, process.env.SECRET);
+};
+
+userSchema.methods.comparePassword = function (password) {
+  return bcrypt.compare(password, this.password)
+    .then(valid => valid ? this : null);
 };
 
 export default mongoose.model('users', userSchema);
