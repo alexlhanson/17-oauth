@@ -50,7 +50,12 @@ router.post('/player', auth, (req, res, next) => {
     .catch(next);
 });
 
-router.put(() => {
+router.put('/player/put/:id', auth, (req, res, next) => {
+  console.log('updating player');
+
+  Player.findByIdAndUpdate({ _id: req.params.id }, req.body)
+    .then(data => res.json(data))
+    .catch(next);
 
 });
 

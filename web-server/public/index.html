@@ -47,6 +47,8 @@
 
       <form id="rugby-put">
         <h2>Update Player Stats</h2>
+        <label for="player-id">Player ID:</label>
+        <input type="text" name="player-id" autocomplete="off">
         <label for="player-name">Player Name:</label>
         <input type="text" name="player-name" autocomplete="off">
         <label for="player-position">Position:</label>
@@ -190,6 +192,25 @@
         .then(response => {
           $('#get-player').text(response.body);
         })
+    })
+
+    $('#rugby-put').on('submit', function (e) {
+      e.preventDefault();
+      let id = $(this).find('[name=player-id]').val();
+      let playerName = $(this).find('[name=player-name]').val();
+      let position = $(this).find('[name=player-position]').val();
+      let matches = $(this).find('[name=player-matches]').val();
+      let tries = $(this).find('[name=player-tries]').val();
+      let points = $(this).find('[name=player-points]').val();
+      let putData = { playerName, position, matches, tries, points }
+
+      superagent.put(`http://localhost:3000/player/put/${id}`)
+        .set("Authorization", "Bearer " + token.innerHTML)
+        .send(putData)
+        .then(response => {
+          $('#get-player').text(response.body);
+        })
+
     })
 
   </script>
