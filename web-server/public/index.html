@@ -23,6 +23,13 @@
       </form>
       <section id="get-player"></section>
 
+      <form id="player-headshot" enctype="multipart/form-data">
+        <h2>Upload Headshot</h2>
+        <label for="title">Title</label>
+        <input type="text" name="title">
+        <label for="file">File</label>
+        <input type="file" name="file">
+        <button type="submit">Upload File</button>
       <form id="rugby-delete">
         <h2>Remove Player</h2>
         <label for="player-id">Player ID:</label>
@@ -141,6 +148,7 @@
       superagent.get('http://localhost:3000/signin')
         .set('Authorization', 'Basic ' + authString)
         .then(response => {
+          localStorage.setItem('token', `${response.text}`);
           $('#token').text(response.text);
           $('#rugby-stats').fadeIn();
           $('#auth').fadeOut();
@@ -160,8 +168,8 @@
         .set('Content-Type', 'application/json')
         .then(response => {
           $('#get-player').text(response.body);
-        })
-    })
+        });
+    });
 
     $('#rugby-post').on('submit', function (e) {
       e.preventDefault();
@@ -180,8 +188,8 @@
         .then(response => {
           console.log(response);
           response.send(response);
-        })
-    })
+        });
+    });
 
     $('#rugby-delete').on('submit', function (e) {
       e.preventDefault();
@@ -191,8 +199,8 @@
         .set("Authorization", "Bearer " + token.innerHTML)
         .then(response => {
           $('#get-player').text(response.body);
-        })
-    })
+        });
+    });
 
     $('#rugby-put').on('submit', function (e) {
       e.preventDefault();
@@ -209,10 +217,32 @@
         .send(putData)
         .then(response => {
           $('#get-player').text(response.body);
-        })
+        });
+    });
 
-    })
+/********************************************************************************
+*         file upload                                                           *
+********************************************************************************/
 
+    $('#player-headshot').on('submit', function (e){
+      e.preventDefault();
+      let formData = new formData(this);
+      let token = localStorage.getItem('token');
+
+      $.ajax({
+        type: 'POST',
+        url: 'http://localhost:3000/upload',
+        data: formData,
+        processData: false,
+        contentType: false,
+        headers: {
+          "Authorization": "Bearer " + token,
+        },
+        success: function(res){
+          console.log('success');
+        }
+      })
+    });
   </script>
 </body>
 
