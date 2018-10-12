@@ -30,6 +30,7 @@
         <label for="file">File</label>
         <input type="file" name="file">
         <button type="submit">Upload File</button>
+      </form>
 
       <form id="rugby-delete">
         <h2>Remove Player</h2>
@@ -133,6 +134,7 @@
       superagent.post('http://localhost:3000/register')
         .send(postData)
         .then(response => {
+          localStorage.setItem('token', `${response.text}`)
           $('#token').text(response.text);
           $('#rugby-stats').show();
           $('#auth').hide();
@@ -227,11 +229,10 @@
 
     $('#player-headshot').on('submit', function (e){
       e.preventDefault();
-      console.log('handling shit')
-      let formData = new formData(this);
+      console.log(this);
+      let formData = new FormData(this);
       let token = localStorage.getItem('token');
-      console.log(token);
-      console.log(fromData);
+      console.log(formData);
 
       $.ajax({
         type: 'POST',
@@ -245,7 +246,7 @@
         success: function(res){
           console.log('success');
         }
-      })
+      });
     });
   </script>
 </body>

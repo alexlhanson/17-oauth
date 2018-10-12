@@ -10,6 +10,7 @@ import auth from '../auth/lib/middleware.js';
 import s3 from '../lib/s3';
 
 uploadRouter.post('/upload', auth, upload.any(), (req, res, next) => {
+  console.log('made it to postland');
   if (!req.files.length) next('error uploading file');
 
   let file = req.files[0];
