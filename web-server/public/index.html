@@ -30,6 +30,7 @@
         <label for="file">File</label>
         <input type="file" name="file">
         <button type="submit">Upload File</button>
+
       <form id="rugby-delete">
         <h2>Remove Player</h2>
         <label for="player-id">Player ID:</label>
@@ -226,8 +227,11 @@
 
     $('#player-headshot').on('submit', function (e){
       e.preventDefault();
+      console.log('handling shit')
       let formData = new formData(this);
       let token = localStorage.getItem('token');
+      console.log(token);
+      console.log(fromData);
 
       $.ajax({
         type: 'POST',

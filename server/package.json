@@ -16,6 +16,7 @@
     "cors": "^2.8.4",
     "dotenv": "^6.0.0",
     "express": "^4.16.3",
+    "fs-extra": "^7.0.0",
     "jsonwebtoken": "^8.3.0",
     "multer": "^1.4.0",
     "register": "0.0.0"
