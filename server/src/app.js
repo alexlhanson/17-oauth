@@ -4,6 +4,7 @@ import express from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import router from './api/api.js';
+import uploadRouter from './api/upload_router';
 
 let app = express();
 
@@ -12,6 +13,7 @@ app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(router);
+app.use(uploadRouter);
 
 let isRunning = false;
 
